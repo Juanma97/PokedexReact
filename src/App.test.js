@@ -1,9 +1,8 @@
 import React from 'react';
-import { render } from '@testing-library/react';
-import App from './App';
+import { render, screen } from '@testing-library/react';
+import AppToolbar from './AppToolbar';
 
-test('renders learn react link', () => {
-  const { getByText } = render(<App />);
-  const linkElement = getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
-});
+test('toolbar title should be Pokedex', () => {
+  render(<AppToolbar />)
+  expect(screen.getByText('Pokedex')).toBeInTheDocument();
+})

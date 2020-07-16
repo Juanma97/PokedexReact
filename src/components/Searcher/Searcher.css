@@ -1,0 +1,13 @@
+.searcher-container{
+    height: 30%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid red;
+  }
+  
+  .searcher{
+    display: flex;
+    height: 56px;
+    width: 460px;
+  }

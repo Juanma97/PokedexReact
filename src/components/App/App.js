@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import AppToolbar from '../AppToolbar/AppToolbar';
 import Searcher from '../Searcher/Searcher';
 import './App.css';
@@ -30,20 +30,35 @@ const useStyles = makeStyles({
 
 function App() {
   const classes = useStyles();
+  const [pokemon, setPokemon] = useState([]);
 
   function getData(){
-    get();
+    get(0, 8)
+    .then(res => res.json())
+    .then((data) => {
+      setPokemon(data.results);
+      console.log("Data: ", data.results);
+    })
+    .catch(console.error)
   }
+
+
+  useEffect(() => {
+    console.log("Estado: ", pokemon);
+  })
+  
 
   return (
     <div className="App">
       <AppToolbar/>
       <Searcher />
+      <Button onClick={getData}>Get Data</Button>
       <div className="grid">
-        <Card className={classes.card}>
+        {pokemon.map((p) => (
+          <Card  className={classes.card}>
           <CardContent className={classes.cardContent}>
             <Typography variant="h6">
-              Titulo
+              {p.name.toUpperCase()}
             </Typography>
             <Typography variant="subtitle1">
               #000
@@ -54,10 +69,10 @@ function App() {
             />
           <CardActions className={classes.cardActions}>
             <Button className={classes.button} 
-            onClick={getData}
             size="small">Detalles</Button>
           </CardActions>
-        </Card>
+        </Card> 
+        ))}
       </div>
     </div>
   );

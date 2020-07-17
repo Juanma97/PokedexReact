@@ -9,6 +9,5 @@
   border: 1px solid green;
   display: grid;
   grid-template-columns: 24% 24% 24% 24%;
-  grid-template-rows: 50% 50%;
   grid-gap: 8px;
 }

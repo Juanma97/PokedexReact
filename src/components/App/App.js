@@ -4,6 +4,7 @@ import Searcher from '../Searcher/Searcher';
 import './App.css';
 import { Card, CardActions, Button, makeStyles, CardContent, Typography, CardMedia } from '@material-ui/core';
 import { red } from '@material-ui/core/colors';
+import get from '../../services/API';
 
 const useStyles = makeStyles({
   card: {
@@ -30,6 +31,10 @@ const useStyles = makeStyles({
 function App() {
   const classes = useStyles();
 
+  function getData(){
+    get();
+  }
+
   return (
     <div className="App">
       <AppToolbar/>
@@ -48,7 +53,9 @@ function App() {
               className={classes.image}
             />
           <CardActions className={classes.cardActions}>
-            <Button className={classes.button} size="small">Detalles</Button>
+            <Button className={classes.button} 
+            onClick={getData}
+            size="small">Detalles</Button>
           </CardActions>
         </Card>
       </div>

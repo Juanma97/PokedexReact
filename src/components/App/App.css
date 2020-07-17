@@ -11,3 +11,7 @@
   grid-template-columns: 24% 24% 24% 24%;
   grid-gap: 8px;
 }
+
+.paginator{
+  display: flex;
+}

@@ -5,6 +5,7 @@ import './App.css';
 import { Card, CardActions, Button, makeStyles, CardContent, Typography, CardMedia } from '@material-ui/core';
 import { red } from '@material-ui/core/colors';
 import get from '../../services/API';
+import Pagination from '@material-ui/lab/Pagination';
 
 const useStyles = makeStyles({
   card: {
@@ -25,21 +26,31 @@ const useStyles = makeStyles({
   image: {
     flexGrow: 0.98,
     backgroundColor: red[500]
+  },
+  paginator: {
+    marginTop: 16
   }
 })
 
 function App() {
   const classes = useStyles();
   const [pokemon, setPokemon] = useState([]);
+  const [count, setCount] = useState(0);
 
-  function getData(){
-    get(0, 8)
+  function getData(offset){
+    get(offset, 8)
     .then(res => res.json())
     .then((data) => {
+      setCount(data.count);
       setPokemon(data.results);
-      console.log("Data: ", data.results);
+      console.log("Data: ", data.count);
     })
     .catch(console.error)
+  }
+
+  function changePage(event, value){
+    var offset = (value - 1) * 8;
+    getData(offset);
   }
 
 
@@ -52,7 +63,7 @@ function App() {
     <div className="App">
       <AppToolbar/>
       <Searcher />
-      <Button onClick={getData}>Get Data</Button>
+      <Button onClick={() => getData(0, 8)}>Get Data</Button>
       <div className="grid">
         {pokemon.map((p) => (
           <Card  className={classes.card}>
@@ -74,6 +85,11 @@ function App() {
         </Card> 
         ))}
       </div>
+      <Pagination 
+      className={classes.paginator} 
+      count={Math.ceil(count / 8)}
+      onChange={changePage}
+       />
     </div>
   );
 }

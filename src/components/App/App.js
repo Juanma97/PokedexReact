@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import AppToolbar from '../AppToolbar/AppToolbar';
 import Searcher from '../Searcher/Searcher';
 import './App.css';
-import { Card, CardActions, Button, makeStyles, CardContent, Typography, CardMedia } from '@material-ui/core';
-import { red } from '@material-ui/core/colors';
+import { Card, CardActions, Button, makeStyles, CardContent, Typography, CardMedia, Spinner } from '@material-ui/core';
 import get from '../../services/API';
 import Pagination from '@material-ui/lab/Pagination';
 
@@ -24,8 +23,7 @@ const useStyles = makeStyles({
     width: '100%'
   },
   image: {
-    flexGrow: 0.98,
-    backgroundColor: red[500]
+    flexGrow: 0.98
   },
   paginator: {
     marginTop: 16
@@ -34,30 +32,36 @@ const useStyles = makeStyles({
 
 function App() {
   const classes = useStyles();
-  const [pokemon, setPokemon] = useState([]);
+  const [pokemonList, setPokemonList] = useState([]);
   const [count, setCount] = useState(0);
+  const [offset, setOffset] = useState(0);
 
   function getData(offset){
     get(offset, 8)
     .then(res => res.json())
     .then((data) => {
       setCount(data.count);
-      setPokemon(data.results);
-      console.log("Data: ", data.count);
+      setPokemonList(data.results);
     })
     .catch(console.error)
   }
 
   function changePage(event, value){
     var offset = (value - 1) * 8;
+    setOffset(offset);
     getData(offset);
   }
 
+  function getIndex(pokemonToSearch){
+    console.log("GET INDEX")
+    var indexImage = 0;
 
-  useEffect(() => {
-    console.log("Estado: ", pokemon);
-  })
-  
+    pokemonList.filter((currentValue, index) => {
+      if(currentValue === pokemonToSearch) indexImage = index + 1 + offset;
+    })
+
+    return indexImage;
+  }
 
   return (
     <div className="App">
@@ -65,18 +69,19 @@ function App() {
       <Searcher />
       <Button onClick={() => getData(0, 8)}>Get Data</Button>
       <div className="grid">
-        {pokemon.map((p) => (
+        {pokemonList.map((pokemon) => (
           <Card  className={classes.card}>
           <CardContent className={classes.cardContent}>
             <Typography variant="h6">
-              {p.name.toUpperCase()}
+              {pokemon.name.toUpperCase()}
             </Typography>
             <Typography variant="subtitle1">
               #000
             </Typography>
           </CardContent>
-          <CardMedia
+            <CardMedia
               className={classes.image}
+              image={"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" + getIndex(pokemon) + ".png"}
             />
           <CardActions className={classes.cardActions}>
             <Button className={classes.button} 

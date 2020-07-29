@@ -63,6 +63,16 @@ function App() {
     return indexImage;
   }
 
+  function getNumber(index){
+    if(index < 10) {
+      return "#00" + index;
+    }else if(index < 100 && index >= 10){
+      return "#0" + index;
+    }else{
+      return "#" + index;
+    }
+  }
+
   return (
     <div className="App">
       <AppToolbar/>
@@ -76,7 +86,7 @@ function App() {
               {pokemon.name.toUpperCase()}
             </Typography>
             <Typography variant="subtitle1">
-              #000
+              {getNumber(getIndex(pokemon))}
             </Typography>
           </CardContent>
             <CardMedia

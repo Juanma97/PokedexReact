@@ -6,6 +6,13 @@ import { Card, CardActions, Button, makeStyles, CardContent, Typography, CardMed
 import get from '../../services/API';
 import Pagination from '@material-ui/lab/Pagination';
 
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from 'react-router-dom';
+
 const useStyles = makeStyles({
   card: {
     margin: 8,
@@ -74,38 +81,45 @@ function App() {
   }
 
   return (
-    <div className="App">
-      <AppToolbar/>
-      <Searcher />
-      <Button onClick={() => getData(0, 8)}>Get Data</Button>
-      <div className="grid">
-        {pokemonList.map((pokemon) => (
-          <Card  className={classes.card}>
-          <CardContent className={classes.cardContent}>
-            <Typography variant="h6">
-              {pokemon.name.toUpperCase()}
-            </Typography>
-            <Typography variant="subtitle1">
-              {getNumber(getIndex(pokemon))}
-            </Typography>
-          </CardContent>
-            <CardMedia
-              className={classes.image}
-              image={"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" + getIndex(pokemon) + ".png"}
-            />
-          <CardActions className={classes.cardActions}>
-            <Button className={classes.button} 
-            size="small">Detalles</Button>
-          </CardActions>
-        </Card> 
-        ))}
+    <Router>
+      <div className="App">
+        <AppToolbar/>
+        <Searcher />
+        <Button onClick={() => getData(0, 8)}>Get Data</Button>
+        <div className="grid">
+          {pokemonList.map((pokemon) => (
+            <Card  className={classes.card}>
+            <CardContent className={classes.cardContent}>
+              <Typography variant="h6">
+                {pokemon.name.toUpperCase()}
+              </Typography>
+              <Typography variant="subtitle1">
+                {getNumber(getIndex(pokemon))}
+              </Typography>
+            </CardContent>
+              <CardMedia
+                className={classes.image}
+                image={"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" + getIndex(pokemon) + ".png"}
+              />
+            <CardActions className={classes.cardActions}>
+              <Link to={{
+                pathname: "/detalles",
+                search: "?pokemonId=" + getIndex(pokemon)
+              }}>
+                <Button className={classes.button} 
+                size="small">Detalles</Button>
+              </Link>
+            </CardActions>
+          </Card> 
+          ))}
+        </div>
+        <Pagination 
+        className={classes.paginator} 
+        count={Math.ceil(count / 8)}
+        onChange={changePage}
+        />
       </div>
-      <Pagination 
-      className={classes.paginator} 
-      count={Math.ceil(count / 8)}
-      onChange={changePage}
-       />
-    </div>
+    </Router>
   );
 }
 
